@@ -1,0 +1,73 @@
+#include "basechange.h"
+#include "ui_basechange.h"
+
+QString inputBase;
+QString outputBase;
+
+baseChange::baseChange(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::baseChange)
+{
+    ui->setupUi(this);
+    connect(ui->binI,&QRadioButton::clicked,this,[=]{baseChange::baseRadioChanged("I","bin");});
+    connect(ui->octI,&QRadioButton::clicked,this,[=]{baseChange::baseRadioChanged("I","oct");});
+    connect(ui->decI,&QRadioButton::clicked,this,[=]{baseChange::baseRadioChanged("I","dec");});
+    connect(ui->hexI,&QRadioButton::clicked,this,[=]{baseChange::baseRadioChanged("I","hex");});
+    connect(ui->binO,&QRadioButton::clicked,this,[=]{baseChange::baseRadioChanged("O","bin");});
+    connect(ui->octO,&QRadioButton::clicked,this,[=]{baseChange::baseRadioChanged("O","oct");});
+    connect(ui->decO,&QRadioButton::clicked,this,[=]{baseChange::baseRadioChanged("O","dec");});
+    connect(ui->hexO,&QRadioButton::clicked,this,[=]{baseChange::baseRadioChanged("O","hex");});
+    connect(ui->btnChange,&QPushButton::clicked,this,[=]{baseChange::changeBtnPushed();});
+}
+
+void baseChange::baseRadioChanged(QString io, QString base)
+{
+    if(io == "I"){
+        inputBase = base;
+    }
+    else{
+        outputBase = base;
+    }
+}
+
+void baseChange::changeBtnPushed()
+{
+    //FIXME:输入问题
+    ui->outputText->setText("");
+    int number;
+    QString result;
+    QString strNumber;
+    QString frontStr;
+    if(inputBase == "bin"){
+        frontStr = "0b";
+    }
+    else if(inputBase == "oct"){
+        frontStr = "0o";
+    }
+    else if(inputBase == "dec"){
+        frontStr = "";
+    }
+    else{
+        frontStr = "0x";
+    }
+    strNumber = frontStr + ui->inputText->text();
+    number = strNumber.toInt();
+    if(outputBase == "bin"){
+        result = QString("%1").arg(number,0,2);
+    }
+    else if(outputBase == "oct"){
+        result = QString("%1").arg(number,0,8);
+    }
+    else if(outputBase == "dec"){
+        result = QString("%1").arg(number,0,10);
+    }
+    else{
+        result = QString("%1").arg(number,0,16);
+    }
+    ui->outputText->setText(result);
+}
+
+baseChange::~baseChange()
+{
+    delete ui;
+}

@@ -1,0 +1,53 @@
+#include "basechange.h"
+#include "ui_basechange.h"
+
+QString inputBase;
+QString outputBase;
+
+baseChange::baseChange(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::baseChange)
+{
+    ui->setupUi(this);
+}
+
+void baseChange::baseRadioChanged(QString io, QString base)
+{
+    if(io == "I"){
+        inputBase = base;
+    }
+    else{
+        outputBase = base;
+    }
+}
+
+void baseChange::changeBtnPushed()
+{
+    ui->outputText->setText("");
+    double number;
+    QString result;
+    QString strNumber;
+    QString frontStr;
+    if(inputBase == "bin"){
+        frontStr = "0b";
+    }
+    else if(inputBase == "oct"){
+        frontStr = "0o";
+    }
+    else if(inputBase == "dec"){
+        frontStr = "";
+    }
+    else{
+        frontStr = "0x";
+    }
+    strNumber = frontStr + ui->inputText->text();
+    number = strNumber.toDouble();
+    if(outputBase == "bin"){
+
+    }
+}
+
+baseChange::~baseChange()
+{
+    delete ui;
+}
